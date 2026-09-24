@@ -1,2 +1,7 @@
 build/
 .qtcreator/
+.venv/
+__pycache__/
+
+.env
+*.sqlite3
