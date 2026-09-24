@@ -2,7 +2,7 @@
 
 Door opener mechanism remotely controlled by an app
 
-- Cross-Platform GUI App made with Qt and QML
+- Cross-Platform GUI App made with Qt
 - Embedded Linux Firmware made with Yocto
 
 Following actions have to be supported:
