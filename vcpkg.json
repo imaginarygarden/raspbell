@@ -1,1 +1,10 @@
-{}
+{
+    "features": {
+        "app-config": {
+            "description": "Dependencies required by the app configuration",
+            "dependencies": [
+                "qt"
+            ]
+        }
+    }
+}

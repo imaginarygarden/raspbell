@@ -4,5 +4,10 @@ project(raspbell VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(app)
-add_subdirectory(hardware)
+if (RASPBELL_COMPILE_APP)
+    add_subdirectory(app)
+endif()
+
+if (RASPBELL_COMPILE_HARDWARE)
+    add_subdirectory(hardware)
+endif()
