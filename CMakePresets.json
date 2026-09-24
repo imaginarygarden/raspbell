@@ -1,0 +1,52 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "Default config",
+            "description": "Sets the default settings other configs can inherit from",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": true
+            }
+        },
+        {
+            "name": "app",
+            "inherits": "default",
+            "displayName":"Qt Application",
+            "description": "Compiles GUI Application",
+            "cacheVariables": {
+                "RASPBELL_COMPILE_APP": true,
+                "VCPKG_MANIFEST_FEATURES": "app-config"
+            }
+        },
+        {
+            "name": "hardware",
+            "inherits": "default",
+            "displayName":"Raspberry Pi Hardware",
+            "description": "Compiles Hardware",
+            "cacheVariables": {
+                "RASPBELL_COMPILE_HARDWARE": true
+            }
+        },
+        {
+            "name": "test",
+            "inherits": "default",
+            "displayName":"Test",
+            "description": "Test",
+            "cacheVariables": {
+                "RASPBELL_COMPILE_HARDWARE": true,
+                "VCPKG_MANIFEST_FEATURES": "app-config"
+            }
+        },
+        {
+            "name": "all",
+            "inherits": ["app", "hardware"],
+            "displayName":"All projects",
+            "description": "Compiles all projects"
+        }
+    ]
+}
