@@ -1,7 +1,11 @@
 build/
+deploy/
 .qtcreator/
+.cache/
 .venv/
 __pycache__/
 
 .env
 *.sqlite3
+
+compile_commands.json

@@ -1,6 +1,2 @@
 {
-    "dependencies": [
-        "qtbase",
-        "qtdeclarative"
-    ]
 }

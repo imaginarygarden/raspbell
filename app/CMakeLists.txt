@@ -32,6 +32,15 @@ endif()
 
 target_include_directories(app PRIVATE "src/")
 
+file(GLOB_RECURSE APP_QML_FILES RELATIVE CONFIGURE_DEPENDS "src/*.qml")
+
+qt_add_qml_module(app
+    URI MyApp
+    VERSION 1.0
+    QML_FILES
+        ${APP_QML_FILES}
+)
+
 target_link_libraries(app
   PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
 
@@ -50,6 +59,15 @@ set_target_properties(app PROPERTIES
 )
 
 include(GNUInstallDirs)
+
+qt_generate_deploy_qml_app_script(
+    TARGET app
+    OUTPUT_SCRIPT deploy_script
+    NO_TRANSLATIONS
+)
+
+install(SCRIPT ${deploy_script})
+
 install(TARGETS app
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
