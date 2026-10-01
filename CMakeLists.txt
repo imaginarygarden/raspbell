@@ -18,3 +18,9 @@ endif()
 if (RASPBELL_COMPILE_HARDWARE)
     add_subdirectory(hardware)
 endif()
+
+file(CREATE_LINK
+  "${CMAKE_BINARY_DIR}/compile_commands.json"
+  "${CMAKE_SOURCE_DIR}/compile_commands.json"
+  SYMBOLIC
+)
