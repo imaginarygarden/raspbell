@@ -11,6 +11,7 @@ target_link_libraries(hardware
    Qt${QT_VERSION_MAJOR}::Widgets
    Qt${QT_VERSION_MAJOR}::Multimedia
    Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+   Qt${QT_VERSION_MAJOR}::HttpServer
 )
 
 install(TARGETS hardware
