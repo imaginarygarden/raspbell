@@ -13,6 +13,24 @@ int main(int argc, char** argv) {
 
     server.route("/", []() { return "Hello World"; });
 
+    server.route("/api/register", QHttpServerRequest::Method::Post,
+                 [](const QHttpServerRequest& request) {
+                     const QJsonDocument doc =
+                         QJsonDocument::fromJson(request.body());
+                     const std::optional<QJsonObject> json = doc.object();
+                     if (!json) {
+                         return QHttpServerResponse(
+                             QHttpServerResponder::StatusCode::BadRequest);
+                     }
+
+                     for (const auto& key : json->keys()) {
+                         qDebug() << key << ": " << json->value(key);
+                     }
+
+                     return QHttpServerResponse(
+                         QHttpServerResponder::StatusCode::Accepted);
+                 });
+
     auto tcpserver = std::make_unique<QTcpServer>();
     if (!tcpserver->listen() || !server.bind(tcpserver.get())) {
         qWarning() << QCoreApplication::translate(
