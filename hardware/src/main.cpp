@@ -1,5 +1,3 @@
-#include <qhostaddress.h>
-
 #include <QApplication>
 #include <QtHttpServer>
 
