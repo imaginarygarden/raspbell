@@ -8,7 +8,6 @@
 #include <QMediaRecorder>
 #include <QPointer>
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
