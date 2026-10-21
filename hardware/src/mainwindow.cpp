@@ -1,11 +1,5 @@
 #include "mainwindow.h"
 
-#include <qimagecapture.h>
-#include <qmediametadata.h>
-#include <qmediarecorder.h>
-#include <qsize.h>
-#include <qtypes.h>
-
 #include <QBuffer>
 #include <QMediaDevices>
 #include <QtWidgets>
