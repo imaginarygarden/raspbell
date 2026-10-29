@@ -55,7 +55,11 @@ void Server::define_routes(crow::SimpleApp& app) noexcept {
                 crow::json::wvalue json{};
                 json["id"] = log.id;
                 json["image"] = log.image;
-                json["timestamp"] = log.timestamp;
+
+                if (log.timestamp) {
+                    json["timestamp"] = *log.timestamp;
+                }
+
                 list.push_back(json);
             }
 
