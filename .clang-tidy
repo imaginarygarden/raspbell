@@ -1,13 +1,14 @@
 Checks: |
+  bugprone-*,
   clang-diagnostic-*,
   clang-analyzer-*,
-  google-*,
+  concurrency-*,
+  cppcoreguidelines-*,
   readability-*,
   modernize-*,
+  misc-*,
   performance-*,
-  readability-identifier-naming,
-  -google-runtime-references,
-  -google-readability-todo,
+  portability-*,
   -modernize-use-trailing-return-type
 
 WarningsAsErrors: "*"

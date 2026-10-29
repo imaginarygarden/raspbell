@@ -1,17 +1,15 @@
-#include "server.h"
-#include <QApplication>
-#include <QtHttpServer>
+#include "server/server.h"
+#include "ui/mainwindow.h"
 
-#include "mainwindow.h"
-#include "store.h"
+#include <QApplication>
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
-    auto store = Store::create();
 
     MainWindow window;
+    window.show();
+
     Server server;
 
-    window.show();
     return QApplication::exec();
 }

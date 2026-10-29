@@ -8,15 +8,16 @@ qt_add_executable(hardware
 find_package(Crow CONFIG REQUIRED)
 find_package(SqliteOrm CONFIG REQUIRED)
 
+target_include_directories(hardware PRIVATE src/)
+
 target_link_libraries(hardware
-   PRIVATE 
-   Qt${QT_VERSION_MAJOR}::Core 
-   Qt${QT_VERSION_MAJOR}::Widgets
-   Qt${QT_VERSION_MAJOR}::Multimedia
-   Qt${QT_VERSION_MAJOR}::MultimediaWidgets
-   Qt${QT_VERSION_MAJOR}::HttpServer
-   Crow::Crow
-   sqlite_orm::sqlite_orm
+  PRIVATE
+  Qt${QT_VERSION_MAJOR}::Core
+  Qt${QT_VERSION_MAJOR}::Widgets
+  Qt${QT_VERSION_MAJOR}::Multimedia
+  Qt${QT_VERSION_MAJOR}::MultimediaWidgets
+  Crow::Crow
+  sqlite_orm::sqlite_orm
 )
 
 install(TARGETS hardware

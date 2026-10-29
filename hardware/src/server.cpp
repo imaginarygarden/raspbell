@@ -1,55 +1,76 @@
 #include "server.h"
+
+#include <crow/common.h>
+#include <crow/http_response.h>
+#include <crow/json.h>
+#include <sqlite_orm/sqlite_orm.h>
+
+#include "data/device.h"
+#include "data/store.h"
+
 #include <functional>
 #include <stop_token>
 #include <chrono>
 
+void Server::setup(crow::SimpleApp& app) noexcept {
+    app.port(PORT).multithreaded();
+}
+
 void Server::define_routes(crow::SimpleApp& app) noexcept {
-    CROW_ROUTE(app, "/")([]() { return "Hello world"; });
-
-    CROW_ROUTE(app, "/json")
-    ([] {
-        crow::json::wvalue json({{"message", "Hello, World!"}});
-        json["message2"] = "Raspi";
-        return json;
-    });
-
-    CROW_ROUTE(app, "/hello/<int>")
-    ([](int count) {
-        const int max_bottles = 100;
-        if (count > max_bottles) {
-            return crow::response(crow::status::BAD_REQUEST);
-        }
-        std::ostringstream stream;
-        stream << count << " bottles of beer!";
-        return crow::response(stream.str());
-    });
-
-    CROW_ROUTE(app, "/add_json")
-        .methods("POST"_method)([](const crow::request& req) {
-            auto json = crow::json::load(req.body);
-            if (!json) {
-                return crow::response(
-                    crow::status::BAD_REQUEST);  // same as crow::response(400)
-            }
-            std::ostringstream stream;
-
-            if (json.has("a") && json.has("b")) {
-                stream << json["a"].i() + json["b"].i();
-            } else {
-                stream << "Empty";
+    CROW_ROUTE(app, "/register")
+        .methods(crow::HTTPMethod::POST)([](const crow::request& req) {
+            auto devices = Store::instance().get_all<Device>();
+            if (!devices.empty()) {
+                return crow::response(crow::status::BAD_REQUEST);
             }
 
-            return crow::response{stream.str()};
+            auto data = crow::json::load(req.body);
+
+            if (!data) {
+                return crow::response(crow::status::BAD_REQUEST);
+            }
+
+            Device device{.name = data["name"].s(),
+                          .password = data["password"].s()};
+            auto insertedId = Store::instance().insert(device);
+
+            return crow::response(crow::json::wvalue{data});
+        });
+
+    CROW_ROUTE(app, "/get_data")
+        .methods(crow::HTTPMethod::GET)([](const crow::request& req) {
+            auto password = req.get_header_value("x-password");
+            auto devices = Store::instance().get_all<Device>(sqlite_orm::where(
+                sqlite_orm::c(&Device::password) == password));
+
+            if (devices.empty()) {
+                return crow::response(crow::status::BAD_REQUEST);
+            }
+
+            auto logs = Store::instance().get_all<Log>();
+
+            crow::json::wvalue::list list{};
+
+            for (auto& log : logs) {
+                crow::json::wvalue json{};
+                json["id"] = log.id;
+                json["image"] = log.image;
+                json["timestamp"] = log.timestamp;
+                list.push_back(json);
+            }
+
+            return crow::response(crow::json::wvalue{list});
         });
 }
 
 Server::Server() {
+    setup(m_app);
     define_routes(m_app);
 
-    m_app.port(PORT).multithreaded();
+    Store::instance().sync_schema();
 
     m_thread = std::jthread([this](const std::stop_token& token) {
-        std::jthread thread(std::bind_front(&crow::SimpleApp::run, &m_app));
+        std::jthread thread{std::bind_front(&crow::SimpleApp::run, &m_app)};
         const uint16_t min_timeout{500};
 
         while (!token.stop_requested()) {
@@ -59,9 +80,4 @@ Server::Server() {
         m_app.stop();
         thread.join();
     });
-}
-
-Server::~Server() {
-    m_thread.request_stop();
-    m_thread.join();
 }

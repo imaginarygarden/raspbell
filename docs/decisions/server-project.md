@@ -1,3 +1,7 @@
 # Why was server project added?
 
-Since the doorbell and application have to connect somehow this can be easily facilitated by a web server. Django was chosen for its extensive utilities and good documentation.
+Since the doorbell and app have to connect this can be facilitated by a server.
+
+Crow was chosen for its simplicity and good documentation.
+
+The server will run as a separate thread and self destroy when the GUI is closed.
