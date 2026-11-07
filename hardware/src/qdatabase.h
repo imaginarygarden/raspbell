@@ -6,8 +6,12 @@
 
 #include <string>
 
+#include "data/user.h"
+#include "data/log.h"
+
 class QDatabase final : public QObject {
     Q_OBJECT
+    Q_DISABLE_COPY(QDatabase)
 
    public:
     enum class QDatabaseStatus : quint8 { CLOSED, CONNECTED };
@@ -18,6 +22,7 @@ class QDatabase final : public QObject {
     };
 
     explicit QDatabase(QObject* parent = nullptr) noexcept : QObject{parent} {}
+    ~QDatabase() final;
 
     [[nodiscard]]
     QDatabaseConnResult connect(
@@ -28,6 +33,24 @@ class QDatabase final : public QObject {
         return m_status;
     }
 
+    [[nodiscard]]
+    std::optional<User> getUser(const QString& username) noexcept;
+
+    [[nodiscard]]
+    bool addUser(const User& user) noexcept;
+
+    [[nodiscard]]
+    bool deleteUser(qint64 id) noexcept;
+
+    [[nodiscard]]
+    std::optional<QList<Log>> getLogs(quint64 limit = 0) noexcept;
+
+    [[nodiscard]]
+    bool addLog(const Log& log) noexcept;
+
+    [[nodiscard]]
+    bool deleteLog(qint64 id) noexcept;
+
    private:
     static constexpr std::string DEFAULT_PATH{"data"};
 
@@ -36,8 +59,17 @@ class QDatabase final : public QObject {
 
     [[nodiscard]]
     bool isConnected() const noexcept {
-        return m_status == QDatabaseStatus::CONNECTED && m_db.isOpen();
+        return m_db.isOpen();
     }
+
+    [[nodiscard]]
+    std::optional<QSqlQuery> prepare(const QString& query) const noexcept;
+
+    [[nodiscard]]
+    bool exec(const QString& query) const noexcept;
+
+    [[nodiscard]]
+    bool createTables() const noexcept;
 };
 
 #endif
