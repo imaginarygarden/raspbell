@@ -1,41 +1,49 @@
 {
-    "version": 3,
-    "configurePresets": [
-        {
-            "name": "default",
-            "displayName": "Default config",
-            "description": "Sets the default settings other configs can inherit from",
-            "hidden": true,
-            "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/${presetName}",
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "CMAKE_EXPORT_COMPILE_COMMANDS": true
-            }
-        },
-        {
-            "name": "app",
-            "inherits": "default",
-            "displayName":"Qt Application",
-            "description": "Compiles GUI Application",
-            "cacheVariables": {
-                "RASPBELL_COMPILE_APP": true
-            }
-        },
-        {
-            "name": "hardware",
-            "inherits": "default",
-            "displayName":"Raspberry Pi Hardware",
-            "description": "Compiles Hardware",
-            "cacheVariables": {
-                "RASPBELL_COMPILE_HARDWARE": true
-            }
-        },
-        {
-            "name": "all",
-            "inherits": ["app", "hardware"],
-            "displayName":"All projects",
-            "description": "Compiles all projects"
-        }
-    ]
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "default",
+      "displayName": "Default config",
+      "description": "Sets the default settings other configs can inherit from",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "installDir": "${sourceDir}/deploy/${presetName}",
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_COLOR_DIAGNOSTICS": true,
+        "CMAKE_GNUtoMS": false,
+        "CMAKE_EXPORT_COMPILE_COMMANDS": true
+      }
+    },
+    {
+      "name": "app",
+      "inherits": "default",
+      "displayName": "Qt Application",
+      "description": "Compiles GUI Application",
+      "cacheVariables": {
+        "RASPBELL_COMPILE_APP": true
+      }
+    },
+    {
+      "name": "hardware",
+      "inherits": "default",
+      "displayName": "Raspberry Pi Hardware",
+      "description": "Compiles Hardware",
+      "cacheVariables": {
+        "RASPBELL_COMPILE_HARDWARE": true
+      }
+    },
+    {
+      "name": "all",
+      "inherits": [
+        "app",
+        "hardware"
+      ],
+      "displayName": "All projects",
+      "description": "Compiles all projects"
+    }
+  ]
 }

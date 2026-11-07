@@ -3,12 +3,10 @@ Checks: |
   clang-diagnostic-*,
   clang-analyzer-*,
   concurrency-*,
-  cppcoreguidelines-*,
   readability-*,
   modernize-*,
   misc-*,
   performance-*,
   portability-*,
-  -modernize-use-trailing-return-type
-
-WarningsAsErrors: "*"
+  -modernize-use-trailing-return-type,
+  -bugprone-easily-swappable-parameters

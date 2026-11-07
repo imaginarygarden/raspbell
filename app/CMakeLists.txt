@@ -1,4 +1,5 @@
-file(GLOB_RECURSE APP_FILES CONFIGURE_DEPENDS "src/*.cpp" "src/*.h" "src/*.ui")
+set(APP_EXTENSTIONS "src/*.cpp" "src/*.h" "src/*.ui")
+file(GLOB_RECURSE APP_FILES CONFIGURE_DEPENDS ${APP_EXTENSTIONS})
 
 qt_add_executable(app
     WIN32 MACOSX_BUNDLE
@@ -6,6 +7,12 @@ qt_add_executable(app
 )
 
 target_include_directories(app PRIVATE src/)
+
+target_compile_features(app PUBLIC cxx_std_20)
+
+set_target_properties(app PROPERTIES CMAKE_AUTOUIC ON)
+set_target_properties(app PROPERTIES CMAKE_AUTOMOC ON)
+set_target_properties(app PROPERTIES CMAKE_AUTORCC ON)
 
 target_link_libraries(app
   PRIVATE
